@@ -3,10 +3,12 @@ import PropTypes from "prop-types"
 import Book from "./Book"
 
 function Shelf({ books, shelves, onUpdateShelf }) {
+    // because books are loaded asynchronously but shelves are not
     const [shelfLabel, setShelfLabel] = useState("Loading...")
 
     useEffect(() => {
         if (books.length) {
+            // find the matching label based on the first book's shelf name
             setShelfLabel(
                 shelves.find((shelf) => books[0].shelf === shelf.name).label
             )
@@ -18,13 +20,14 @@ function Shelf({ books, shelves, onUpdateShelf }) {
             <h2 className="bookshelf-title">{shelfLabel}</h2>
             <div className="bookshelf-books">
                 <ol className="books-grid">
-                    {books.map((book, i) => {
+                    {books.map((book) => {
+                        // for each book in the shelf render a specific component
                         return (
                             <Book
                                 book={book}
                                 shelves={shelves}
                                 onUpdateShelf={onUpdateShelf}
-                                key={i}
+                                key={book.id}
                             />
                         )
                     })}
@@ -34,9 +37,11 @@ function Shelf({ books, shelves, onUpdateShelf }) {
     )
 }
 
+// check props
 Shelf.propTypes = {
     books: PropTypes.array.isRequired,
     shelves: PropTypes.array.isRequired,
+    onUpdateShelf: PropTypes.func.isRequired,
 }
 
 export default Shelf
