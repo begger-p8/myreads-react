@@ -1,8 +1,6 @@
 import { Link } from "react-router-dom"
-import { useState, useEffect } from "react"
 import Shelf from "./Shelf"
 import PropTypes from "prop-types"
-import * as BooksAPI from "../utils/BooksAPI.js"
 
 function BooksOverview({ books, shelves, onUpdateShelf }) {
     return (
@@ -11,6 +9,9 @@ function BooksOverview({ books, shelves, onUpdateShelf }) {
                 <h1>MyReads</h1>
             </div>
             <div className="list-books-content">
+                {/* for each shelf render a specific component and use the index (i) as the key */}
+                {/* the books passed are only the shelf matching ones */}
+                {/* shelf update event is handled also */}
                 {shelves.map((shelf, i) => (
                     <Shelf
                         books={books.filter(
@@ -22,6 +23,7 @@ function BooksOverview({ books, shelves, onUpdateShelf }) {
                     />
                 ))}
             </div>
+            {/* use Link to navigate */}
             <div className="open-search">
                 <Link to="/search">Add a book</Link>
             </div>
@@ -29,8 +31,11 @@ function BooksOverview({ books, shelves, onUpdateShelf }) {
     )
 }
 
+// check props
 BooksOverview.propTypes = {
+    books: PropTypes.array.isRequired,
     shelves: PropTypes.array.isRequired,
+    onUpdateShelf: PropTypes.func.isRequired,
 }
 
 export default BooksOverview

@@ -6,6 +6,7 @@ import { BrowserRouter } from "react-router-dom"
 
 ReactDOM.render(
     <React.StrictMode>
+        {/* use browser router for client side rendering */}
         <BrowserRouter>
             <App />
         </BrowserRouter>

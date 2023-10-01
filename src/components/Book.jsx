@@ -1,29 +1,19 @@
 import PropTypes from "prop-types"
 import * as BooksAPI from "../utils/BooksAPI.js"
-import { useEffect, useState } from "react"
 
 function Book({ book, shelves, onUpdateShelf }) {
-    // const [bookItem, setBookItem] = useState(book)
-
-    // async function setBookShelf(book) {
-    //     const resAllBooks = await BooksAPI.getAll()
-    //     const matchingBook = resAllBooks.find((b) => b.id === book.id)
-    //     let shelf = matchingBook ? matchingBook.shelf : "none"
-    //     setBookItem({ ...book, shelf: shelf })
-    // }
-
     async function handleUpdateShelf(event) {
-        const resUpdate = await BooksAPI.update(book, event.target.value)
-        if (onUpdateShelf) {
-            onUpdateShelf(resUpdate)
-        }
+        // send an API request to update the book's data
+        // parameters are the book being updated and the new shelf name
+        // because the function is called via the onChange event,
+        // the select value can be accessed throught the event target
+        await BooksAPI.update(book, event.target.value).then((res) => {
+            if (onUpdateShelf) {
+                // call the callback function and pass response (updated book list)
+                onUpdateShelf(res)
+            }
+        })
     }
-
-    // useEffect(() => {
-    //     if (!book.shelf) {
-    //         setBookShelf(book)
-    //     }
-    // }, [book])
 
     return (
         <li>
@@ -37,12 +27,14 @@ function Book({ book, shelves, onUpdateShelf }) {
                             backgroundImage: `url(${book.imageLinks?.thumbnail})`,
                         }}></div>
                     <div className="book-shelf-changer">
+                        {/* use the set shelf as default and if it's undefinded use "none" */}
                         <select
                             onChange={handleUpdateShelf}
-                            defaultValue={book.shelf}>
+                            defaultValue={book.shelf || "none"}>
                             <option value="-" disabled>
                                 Move to...
                             </option>
+                            {/* always use the shelf data defined in the main component to be consistent */}
                             {shelves.map((shelf) => (
                                 <option value={shelf.name} key={shelf.name}>
                                     {shelf.label}
@@ -55,6 +47,7 @@ function Book({ book, shelves, onUpdateShelf }) {
                 <div className="book-title">{book.title}</div>
                 <div className="book-authors">
                     {book.authors?.map((author, i) => {
+                        // if the book has multiple authors, separate them with a comma
                         return `${author}${
                             i < book.authors.length - 1 ? ", " : ""
                         }`
@@ -65,9 +58,11 @@ function Book({ book, shelves, onUpdateShelf }) {
     )
 }
 
+// check props
 Book.propTypes = {
     book: PropTypes.object.isRequired,
     shelves: PropTypes.array.isRequired,
+    onUpdateShelf: PropTypes.func.isRequired,
 }
 
 export default Book
