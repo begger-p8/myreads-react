@@ -25,15 +25,19 @@ function App() {
     const [shelvedBooks, setShelvedBooks] = useState([])
     // fetch shelved book from API
     async function getBooks() {
-        return await BooksAPI.getAll()
+        await BooksAPI.getAll().then((res) => setShelvedBooks(res))
+    }
+    // re-define shelved books based on update API response
+    function updateShelf(updatedShelf) {
+        console.log(updatedShelf)
     }
     // initially fetch shelved books from API
-    // useEffect(() => {
-    //     setShelvedBooks(getBooks())
-    //     return () => {
-    //         setShelvedBooks([])
-    //     }
-    // })
+    useEffect(() => {
+        getBooks()
+        return () => {
+            setShelvedBooks([])
+        }
+    }, [])
     // define routes and pass elements with prop
     return (
         <Routes>
@@ -44,8 +48,9 @@ function App() {
                 path="/"
                 element={
                     <BooksOverview
-                        shelvedBooks={shelvedBooks}
+                        books={shelvedBooks}
                         shelves={shelves}
+                        onUpdateShelf={updateShelf}
                     />
                 }
             />
