@@ -1,10 +1,10 @@
 import PropTypes from "prop-types"
 import * as BooksAPI from "../utils/BooksAPI.js"
 
-function Book({ book, shelves }) {
+function Book({ book, shelves, onUpdateShelf }) {
     async function handleUpdateShelf(event) {
-        const resUpdateShelf = await BooksAPI.update(book, event.target.value)
-        console.log(resUpdateShelf)
+        await BooksAPI.update(book, event.target.value)
+        onUpdateShelf()
     }
     return (
         <li key={book.id}>
@@ -18,7 +18,9 @@ function Book({ book, shelves }) {
                             backgroundImage: `url(${book.imageLinks?.thumbnail})`,
                         }}></div>
                     <div className="book-shelf-changer">
-                        <select onChange={handleUpdateShelf}>
+                        <select
+                            onChange={handleUpdateShelf}
+                            defaultValue={book.shelf}>
                             <option value="none" disabled>
                                 Move to...
                             </option>
@@ -27,6 +29,7 @@ function Book({ book, shelves }) {
                                     {shelf.label}
                                 </option>
                             ))}
+                            {/* <option value="none">None</option> */}
                         </select>
                     </div>
                 </div>

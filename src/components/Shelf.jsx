@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import PropTypes from "prop-types"
 import Book from "./Book"
 
-function Shelf({ books, shelves }) {
+function Shelf({ books, shelves, onUpdateShelf }) {
     const [shelfLabel, setShelfLabel] = useState("Loading...")
     useEffect(() => {
         if (books.length) {
@@ -17,7 +17,14 @@ function Shelf({ books, shelves }) {
             <div className="bookshelf-books">
                 <ol className="books-grid">
                     {books.map((book, i) => {
-                        return <Book book={book} shelves={shelves} key={i} />
+                        return (
+                            <Book
+                                book={book}
+                                shelves={shelves}
+                                onUpdateShelf={onUpdateShelf}
+                                key={i}
+                            />
+                        )
                     })}
                 </ol>
             </div>

@@ -17,10 +17,6 @@ function App() {
             name: "read",
             label: "Read",
         },
-        {
-            name: "none",
-            label: "None",
-        },
     ]
     return (
         <Routes>

@@ -6,11 +6,11 @@ import * as BooksAPI from "../utils/BooksAPI.js"
 
 function BooksOverview({ shelves }) {
     const [books, setBooks] = useState([])
+    async function getAllBooks() {
+        const resAllBooks = await BooksAPI.getAll()
+        setBooks(resAllBooks)
+    }
     useEffect(() => {
-        async function getAllBooks() {
-            const resAllBooks = await BooksAPI.getAll()
-            setBooks(resAllBooks)
-        }
         getAllBooks()
     }, [])
 
@@ -20,17 +20,16 @@ function BooksOverview({ shelves }) {
                 <h1>MyReads</h1>
             </div>
             <div className="list-books-content">
-                {shelves
-                    .filter((shelf) => shelf.name !== "none")
-                    .map((shelf, i) => (
-                        <Shelf
-                            books={books.filter(
-                                (book) => book.shelf === shelf.name
-                            )}
-                            shelves={shelves}
-                            key={i}
-                        />
-                    ))}
+                {shelves.map((shelf, i) => (
+                    <Shelf
+                        books={books.filter(
+                            (book) => book.shelf === shelf.name
+                        )}
+                        shelves={shelves}
+                        onUpdateShelf={getAllBooks}
+                        key={i}
+                    />
+                ))}
             </div>
             <div className="open-search">
                 <Link to="/search">Add a book</Link>
