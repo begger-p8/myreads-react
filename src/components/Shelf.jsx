@@ -4,6 +4,7 @@ import Book from "./Book"
 
 function Shelf({ books, shelves, onUpdateShelf }) {
     const [shelfLabel, setShelfLabel] = useState("Loading...")
+
     useEffect(() => {
         if (books.length) {
             setShelfLabel(
@@ -11,6 +12,7 @@ function Shelf({ books, shelves, onUpdateShelf }) {
             )
         }
     }, [books, shelves])
+
     return (
         <div className="bookshelf">
             <h2 className="bookshelf-title">{shelfLabel}</h2>

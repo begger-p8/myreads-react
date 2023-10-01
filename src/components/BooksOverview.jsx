@@ -6,12 +6,17 @@ import * as BooksAPI from "../utils/BooksAPI.js"
 
 function BooksOverview({ shelves }) {
     const [books, setBooks] = useState([])
+
     async function getAllBooks() {
         const resAllBooks = await BooksAPI.getAll()
         setBooks(resAllBooks)
     }
+
     useEffect(() => {
         getAllBooks()
+        return () => {
+            setBooks([])
+        }
     }, [])
 
     return (
