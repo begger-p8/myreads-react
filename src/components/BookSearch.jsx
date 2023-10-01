@@ -9,12 +9,13 @@ function BookSearch({ shelves }) {
     async function handleQuery(event) {
         const query = event.target.value
         if (query.length > 1) {
-            const resSearch = await BooksAPI.search(query)
-            if (resSearch.length) {
-                setResults(resSearch)
-            } else {
-                setResults([])
-            }
+            await BooksAPI.search(query).then((res) => {
+                if (res.length) {
+                    setResults(res)
+                } else {
+                    setResults([])
+                }
+            })
         } else {
             setResults([])
         }

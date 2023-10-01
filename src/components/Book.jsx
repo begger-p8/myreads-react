@@ -6,17 +6,19 @@ function Book({ book, shelves, onUpdateShelf }) {
     const [bookItem, setBookItem] = useState(book)
 
     async function setBookShelf(book) {
-        const resAllBooks = await BooksAPI.getAll()
-        const matchingBook = resAllBooks.find((b) => b.id === book.id)
-        let shelf = matchingBook ? matchingBook.shelf : "none"
-        setBookItem({ ...book, shelf: shelf })
+        await BooksAPI.getAll().then((res) => {
+            const matchingBook = res.find((b) => b.id === book.id)
+            let shelf = matchingBook ? matchingBook.shelf : "none"
+            setBookItem({ ...book, shelf: shelf })
+        })
     }
 
     async function handleUpdateShelf(event) {
-        await BooksAPI.update(book, event.target.value)
-        if (onUpdateShelf) {
-            onUpdateShelf()
-        }
+        await BooksAPI.update(book, event.target.value).then((res) => {
+            if (onUpdateShelf) {
+                onUpdateShelf()
+            }
+        })
     }
 
     useEffect(() => {

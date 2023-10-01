@@ -8,8 +8,7 @@ function BooksOverview({ shelves }) {
     const [books, setBooks] = useState([])
 
     async function getAllBooks() {
-        const resAllBooks = await BooksAPI.getAll()
-        setBooks(resAllBooks)
+        await BooksAPI.getAll().then((res) => setBooks(res))
     }
 
     useEffect(() => {
