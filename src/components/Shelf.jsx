@@ -6,14 +6,15 @@ function Shelf({ books, shelves, onUpdateShelf }) {
     // because books are loaded asynchronously but shelves are not
     const [shelfLabel, setShelfLabel] = useState("Loading...")
 
-    useEffect(() => {
-        if (books.length) {
-            // find the matching label based on the first book's shelf name
-            setShelfLabel(
-                shelves.find((shelf) => books[0].shelf === shelf.name).label
-            )
+    if (books.length) {
+        // find the matching label based on the first book's shelf name
+        const newLabel = shelves.find(
+            (shelf) => books[0].shelf === shelf.name
+        ).label
+        if (newLabel !== shelfLabel) {
+            setShelfLabel(newLabel)
         }
-    }, [books, shelves])
+    }
 
     return (
         <div className="bookshelf">

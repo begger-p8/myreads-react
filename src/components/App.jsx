@@ -5,7 +5,7 @@ import BooksOverview from "./BooksOverview"
 import * as BooksAPI from "../utils/BooksAPI.js"
 import { useEffect, useState } from "react"
 
-// compnent structure of the app:
+// component structure of the app:
 // - app (handling views, shelves and administrates the books that are shown in shelves)
 // - - book overview
 // - - - - shelf (one for each book shelf, handles books for specific shelf)
@@ -39,13 +39,24 @@ function App() {
     async function updateShelf(updatedBooks) {
         let newBooks = []
         if (updatedBooks) {
-            // for each book in a shelf fetch the book data and store in an new array
+            // for each book in a shelf get data and store in a new array
             for (let shelf in updatedBooks) {
                 for (let i = 0; i < updatedBooks[shelf].length; i++) {
-                    await BooksAPI.get(updatedBooks[shelf][i]).then((book) => {
-                        let newBook = { ...book, shelf: shelf }
-                        newBooks.push(newBook)
+                    // find book in shelved books
+                    const matchingShelvedBook = shelvedBooks.find((shelved) => {
+                        return updatedBooks[shelf][i] === shelved.id
                     })
+                    if (matchingShelvedBook) {
+                        // if book already is in shelf only update shelf (other data is already loaded)
+                        newBooks.push({ ...matchingShelvedBook, shelf: shelf })
+                    } else {
+                        // else fetch the new book's data
+                        await BooksAPI.get(updatedBooks[shelf][i]).then(
+                            (book) => {
+                                newBooks.push({ ...book, shelf: shelf })
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -55,10 +66,6 @@ function App() {
     // initially fetch shelved books from API
     useEffect(() => {
         getBooks()
-        // cleanup
-        return () => {
-            setShelvedBooks([])
-        }
     }, [])
     // define routes and pass elements with prop
     return (

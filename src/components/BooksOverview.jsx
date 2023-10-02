@@ -12,14 +12,14 @@ function BooksOverview({ books, shelves, onUpdateShelf }) {
                 {/* for each shelf render a specific component and use the index (i) as the key */}
                 {/* the books passed are only the shelf matching ones */}
                 {/* shelf update event is handled also */}
-                {shelves.map((shelf, i) => (
+                {shelves.map((shelf) => (
                     <Shelf
                         books={books.filter(
                             (book) => book.shelf === shelf.name
                         )}
                         shelves={shelves}
                         onUpdateShelf={onUpdateShelf}
-                        key={i}
+                        key={shelf.name}
                     />
                 ))}
             </div>
